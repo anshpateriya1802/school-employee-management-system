@@ -1,0 +1,106 @@
+import mysql.connector as c
+mycon=c.connect(host="localhost",user="root",passwd="",database="project")
+
+
+print("+---------------------------------------+")
+print("|               WELCOME                 |")
+print("|                 TO                    |")
+print("|      KENDRIYA VIDYALAYA SANGATHAN     |")
+print("+---------------------------------------+")
+print("                                         ")
+print("                                         ")
+
+cursor=mycon.cursor()    #cursor creation
+print("*"*50)
+print(" "*15,end=' ')
+print("EMPLOYEE DATA")
+print("*"*50)
+
+
+while (True):
+    print("*"*50)
+    print("1->VIEW EMPLOYEE DATA.")
+    print("2->ENTER NEW EMPLOYEE DATA.")
+    print("3->UPDATE EMPLOYEE DATA.")                       #MAIN MENU
+    print("4->DELETE EMPLOYEE DATA.")
+    print("5->EXIT")
+    print("*"*50)
+    md=int(input("YOU WANT TO:-"))
+    if md==1:
+        query=("select * from emp;")
+        cursor.execute(query)                              #VIEWING DATA
+        data=cursor.fetchall()
+        for rl in data:
+             print(rl)
+        choice=int(input("1->MAIN MENU\n2->EXIT\nENTER YOUR CHOICE:-"))
+        if choice==2:
+            exit()
+            
+    #CHANGE
+    elif md==2:
+        while True:
+            c=int(input("Enter Employee Code:"))
+            n=input("Enter Employee Name:")
+            d=input("Enter Employee Designation:")
+            s=input("Enter Employee Salary:")
+            query="insert into emp(CODE,NAME,DESIGNATION,SALARY)values({},'{}','{}',{})".format(c,n,d,s)                 #ENTERING NEW DATA
+            cursor.execute(query)
+            mycon.commit()
+            print("DATA INSERTED SUCCESSFULLY...")
+
+            choice=int(input("1->Enter More Record\n2->Main Menu\nEnter Your Choice:"))
+            if choice==2:
+                      break
+    #CHANGE
+    elif md==3:
+        while True:
+            print("PLEASE SELECT WHAT YOU WANT TO UPDATE:-")                  #UPDATING DATA
+            choice=int(input("1->Employee Code\n2->Employee Name\n3->Employee Designation\n4->Employee Salary\nEnter Your Choice:-"))
+            if choice==1:
+                na=input("Please Enter The Name Of Employee Of Which You Want To Update Data:")         
+                co=int(input("Please Enter New Code Of The Employee:-"))
+                query="update emp set CODE={} where NAME='{}'".format(co,na)
+                cursor.execute(query)
+            
+                mycon.commit()
+                print("CODE UPDATED SUCCESSFULLY...")
+            elif choice==2:
+                co=int(input("Please Enter The Code Of Employee Of Which You Want To Update Data:"))
+                na=input("Please Enter New Name Of The Employee:-")
+                query="update emp set NAME='{}' where CODE={}".format(na,co)
+                cursor.execute(query)
+                mycon.commit()
+                print("NAME UPDATED SUCCESSFULLY...")
+            elif choice==3:
+                co=int(input("Please Enter The Code Of Employee Of Which You Want To Update Data:")) 
+                da=input("Please Enter New Designation Of Employee:-")
+                query="update emp set DESIGNATION='{}' where CODE={};".format(da,co)
+                cursor.execute(query)
+                mycon.commit()
+                print("DESIGNATION UPDATED SUCCESSFULLY...")
+            elif choice==4:
+                co=int(input("Please Enter The Code Of Employee Of Which You Want To Update Data:"))
+                sa=input("Please Enter New Salary Of Employee:-")
+                query="update emp set SALARY={} where CODE={}".format(sa,co)
+                cursor.execute(query)
+            
+                mycon.commit()
+                print("SALARY UPDATED SUCCESSFULLY...")
+            else:
+                print("PLEASE ENTER VALID CHOICE....")
+            choice=int(input("1->UPDATE ANOTHER RECORD.\n2->MAIN MENU.\nEnter Your Choice:-"))
+            if choice==2:
+                break
+
+    #CHANGE
+    elif md==4:
+        co=int(input("Please Enter The Code Of Employee You Want To Delete:-"))              #DELETING DATA
+        query="DELETE FROM emp WHERE CODE={}".format(co)
+        print("DELETED DATA SUCCESSFULLY...")
+        choice=int(input("1->DELETE MORE DATA.\n2->MAIN MENU\nENTER YOUR CHOICE:"))
+    #CHANGE
+    elif md==5:
+        exit()
+    #CHANGE
+    else:
+        print("NO SUCH COMMAND")
